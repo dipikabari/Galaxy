@@ -20,4 +20,28 @@ struct SolarSystem {
                 )
             )
     }
+    
+    static func earth(size: CGFloat, rotation: CGFloat, moonOverlay: @escaping (CGFloat) -> some View ) -> some View {
+        Text("🌍")
+            .font(.system(size: size))
+            .rotationEffect(.degrees(rotation * 360.0))
+            .overlay(moonOverlay(size - 10.0))
+    }
+    
+    static func earthOverlay(moonSize: CGFloat, progress: CGFloat, path: Path) -> some View {
+        GeometryReader { proxy in
+            let size = proxy.size
+            let scaleFactor: CGFloat = 2.0
+            
+            Text("🌚")
+                .font(.system(size: moonSize))
+                .pathAnimation(
+                    progress: progress,
+                    path: Path.circle(
+                        center: size.center,
+                        size: size.applying(CGAffineTransform(scaleX: scaleFactor, y: scaleFactor))
+                    )
+                )
+        }
+    }
 }

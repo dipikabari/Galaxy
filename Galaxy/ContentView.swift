@@ -16,6 +16,7 @@ struct ContentView: View {
     var body: some View {
         GeometryReader { proxy in
             let size = proxy.size
+            
             SolarSystem.sun(
                 position: size.center,
                 size: 70.0,
@@ -26,22 +27,51 @@ struct ContentView: View {
                 radius: sunScale * 10.0
             )
             
+            SolarSystem.earth(
+                size: 50.0,
+                rotation: earthRotation,
+                moonOverlay: { moonSize in
+                    SolarSystem.earthOverlay(
+                        moonSize: moonSize,
+                        progress: moonProgress,
+                        path: Path.circle(
+                            center: size.center,
+                            size: size.applying(.init(scaleX: 0.6, y: 0.6))
+                        )
+                    )
+                }
+            )
+            .pathAnimation(
+                progress: earthProgress,
+                path: Path.circle(
+                    center: size.center,
+                    size: size.applying(.init(scaleX: 0.6, y: 0.6))
+                )
+            )
         }
+        .onAppear(perform: animation)
     }
     
-    
-    
-}
-
-//MARK: - CGSize+Extensions
-extension CGSize {
-    var center: CGPoint {
-        return CGPoint(x: width / 2.0, y: height / 2.0)
+    private func animation() {
+        let earthDuration: CGFloat = 30
+        withAnimation(.linear(duration: earthDuration).repeatForever(autoreverses: false)) {
+            earthProgress = 1.0
+        }
+        withAnimation(.linear(duration: earthDuration / 8).repeatForever(autoreverses: false)) {
+            earthRotation = 1.0
+        }
+        withAnimation(.linear(duration: (earthDuration / 6)).repeatForever(autoreverses: false)) {
+            moonProgress = 1.0
+        }
+        withAnimation(.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {
+            sunScale = 1.1
+        }
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+            .background(Color.blue)
     }
 }
