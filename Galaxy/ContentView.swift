@@ -17,6 +17,20 @@ struct ContentView: View {
         GeometryReader { proxy in
             let size = proxy.size
             
+            let earthPath = Path.circle(
+                center: size.center,
+                size: size.applying(.init(scaleX: 0.6, y: 0.6))
+            )
+            
+            let moonPath = Path.circle(
+                center: size.center,
+                size: size.applying(.init(scaleX: 0.3, y: 0.3))
+            )
+
+            // Draw the path for tracing
+            earthPath.stroke(Color.white.opacity(0.5), lineWidth: 1)
+                
+            // Add celestial bodies
             SolarSystem.sun(
                 position: size.center,
                 size: 70.0,
@@ -26,7 +40,7 @@ struct ContentView: View {
                 color: .yellow,
                 radius: sunScale * 10.0
             )
-            
+                
             SolarSystem.earth(
                 size: 50.0,
                 rotation: earthRotation,
@@ -34,26 +48,20 @@ struct ContentView: View {
                     SolarSystem.earthOverlay(
                         moonSize: moonSize,
                         progress: moonProgress,
-                        path: Path.circle(
-                            center: size.center,
-                            size: size.applying(.init(scaleX: 0.6, y: 0.6))
-                        )
+                        path: moonPath
                     )
                 }
             )
             .pathAnimation(
                 progress: earthProgress,
-                path: Path.circle(
-                    center: size.center,
-                    size: size.applying(.init(scaleX: 0.6, y: 0.6))
-                )
+                path: earthPath
             )
         }
         .onAppear(perform: animation)
     }
     
     private func animation() {
-        let earthDuration: CGFloat = 30
+        let earthDuration: CGFloat = 60
         withAnimation(.linear(duration: earthDuration).repeatForever(autoreverses: false)) {
             earthProgress = 1.0
         }

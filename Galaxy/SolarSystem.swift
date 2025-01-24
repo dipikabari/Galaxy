@@ -22,7 +22,7 @@ struct SolarSystem {
     }
     
     static func earth(size: CGFloat, rotation: CGFloat, moonOverlay: @escaping (CGFloat) -> some View ) -> some View {
-        Text("🌍")
+        Text("🌏")
             .font(.system(size: size))
             .rotationEffect(.degrees(rotation * 360.0))
             .overlay(moonOverlay(size - 10.0))
@@ -32,8 +32,8 @@ struct SolarSystem {
         GeometryReader { proxy in
             let size = proxy.size
             let scaleFactor: CGFloat = 2.0
-            
-            Text("🌚")
+
+            Text("🌝")
                 .font(.system(size: moonSize))
                 .pathAnimation(
                     progress: progress,
