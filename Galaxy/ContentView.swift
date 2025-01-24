@@ -16,9 +16,10 @@ struct ContentView: View {
     var body: some View {
         GeometryReader { proxy in
             let size = proxy.size
-            sun(
+            SolarSystem.sun(
                 position: size.center,
-                size: 70.0
+                size: 70.0,
+                scale: sunScale
             )
             .shadow(
                 color: .yellow,
@@ -28,17 +29,7 @@ struct ContentView: View {
         }
     }
     
-    private func sun(position: CGPoint, size: CGFloat) -> some View {
-        Text("🌞")
-            .font(.system(size: size))
-            .position(position)
-            .scaleEffect(
-                CGSize(
-                    width: sunScale,
-                    height: sunScale
-                )
-            )
-    }
+    
     
 }
 
